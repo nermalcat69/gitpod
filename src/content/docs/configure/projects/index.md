@@ -44,8 +44,6 @@ The following are a list of important notes about how Projects work in Gitpod.
 1. Projects are created in the current Organization. Ensure you are looking at the correct Organization using the Organization switcher in the top left of the dashboard.
 2. Add a new Project to the Organization by visiting [/projects/new](https://gitpod.io/projects/new). You can also create Projects directly from the [/projects](https://gitpod.io/projects) page.
 
-> **Note:** Projects are associated with Organizations. Ensure that you
-
 <!-- * A user can only add repositories that they have access to.  -->
 
 <!-- * You may also be prompted to configure our [GitHub app](/docs/configure/authentication/github#authorizing-github-webhooks), the first time a project is created for a GitHub account. The new project will be associated with the current organization selected in the dashboard. -->
@@ -71,7 +69,7 @@ Organization members do the following via Project settings:
 
 ## FAQs
 
-### Am I billed for Projects?
+### Does billing apply for Projects?
 
 Creating a Project to configure environment variables is not included in your [Billing](/docs/configure/billing).
 
@@ -81,11 +79,3 @@ However, any configured Prebuild usage is billed.
 
 1. Reconnect your git provider in [/integrations](https://gitpod.io/integrations).
 2. Ensure at least read scopes/permissions are set for the git integration in [user settings](https://gitpod.io/settings).
-
-<!--
-
-Thoughts:
-1. Environment Variables could be for Prebuilds and general.
-2.
-
- -->

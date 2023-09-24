@@ -67,14 +67,6 @@ export const MENU: MenuEntry[] = [
 	M('Projects', 'configure/projects', false, [
 		// Why is this side bar name different to the title / URL?
 		M('Prebuilds', 'configure/projects/prebuilds'),
-		M('Incremental Prebuilds', 'configure/projects/incremental-prebuilds'),
-		M(
-			'Last Successful Prebuild',
-			'configure/projects/last-successful-prebuild',
-			false,
-			[],
-			'alpha',
-		),
 		M('Environment Variables', 'configure/projects/environment-variables'),
 	]),
 
