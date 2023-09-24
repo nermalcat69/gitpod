@@ -104,7 +104,7 @@ Since prebuilds are included in all our metered [pay-as-you-go](https://www.gitp
 
 You can find a log of past Prebuilds in your Project settings.
 
-1. Go to the [/projects](gitpod.io/projects) page.
+1. Go to the [/projects](https://gitpod.io/projects) page.
 2. Select the Project.
 3. Navigate to the "Prebuilds" tab to see Prebuild history.
 
