@@ -6,41 +6,54 @@ description: Learn how to manage projects in your organization. Also learn about
 
 # Projects
 
-Projects live under a Gitpod organization. They connect Gitpod to a git repository. A Gitpod project can only have one git repository, and a git repository can only belong to one project.
+A project is an **optional** way to collaboratively add configuration and refine the experience of working with a repository in Gitpod. You **do not need to create projects to work with Gitpod**. Any user can open any repository from the git providers that the user has authorized in their settings.
 
-A project is required in order to trigger [prebuilds](/docs/configure/projects/prebuilds) on a repository. Organization members use the project to configure and view prebuilds.
+## Why are Projects useful?
 
-With [organization billing](/docs/configure/billing#configure-organization-billing), all project usage such as workspaces and prebuilds, may be billed to the organization.
+1. **Improve workspace start performance** - Enabling Prebuilds will help to speed up the time to open a workspace in Gitpod by running defined installation tasks in `.gitpod.yml` asynchronously, similarly to how Continuous Integration (CI) systems work.
+2. **Create "golden paths" for your repositories** - When you create projects, you are "signposting" to other users of your Organization that the repository is now fully configured and is ready-to-code.
+3. **Add dynamic configuration** - With Projects you can attach environment variables to be used in your `.gitpod.yml` configuration. It can be useful to centrally manage environment variables, rather than manage distributing those environment variables to all the users of an organisation.
 
-Projects have a static URL based on the organization and project name, for example:
+## How Projects relate to a repository `.gitpod.yml`
 
-<!-- TODO: Update slug, depends upon => https://github.com/gitpod-io/gitpod/pull/16050#pullrequestreview-1272075181 -->
+The `.gitpod.yml` stored in your repository is a declarative instruction set of how a repository should be started. Gitpod runs these instructions automatically when workspaces start.
 
-`https://gitpod.io/t/<team>/<project>`
+The project entity is _complimentary_ to a repositories `.gitpod.yml` definition, as you can access the environment variables defined in the project in your scripts. You can also configure the `init` and `before` tasks in your `.gitpod.yml` to be executed as a Prebuild (if prebuilds are enabled on the Project).
 
-### View projects
+## Characteristics of a Project
 
-The Projects page for a organization shows a card for each project.
+1. **Projects are associated within an organisation** - A project is created within a Gitpod Organisation so that when Prebuilds are enabled on a project, cost is attributed to the organisation.
+2. **Projects are connected to a single git repository** - However, using a multi-repo configuration, repositories can be connected together.
+3. **Anyone can create and edit project** - All members of an organisation can see all projects and all members can update any setting in a project. All proejcts are viewable regardless of whether the user has access to the respective SCM (e.g. GitHub), those an error will be shown when starting workspaces where the user is not permitted to read the repository.
+4. **Some project settings require SCM permissions** - Some project settings, such as prebuilds will require the user to have certain SCM permissions, such as the ability to create a webhook.
+5. **A repository can only have one project** - You can only have one project per repository in Gitpod.
 
-Cards show the name, repository URL, quick links to project branches and prebuilds, and the branch and timestamp of the latest prebuild.
+## Managing Projects
 
-### Add a new project
+### Viewing a Project
 
-To add a new project, click on _New Project_ on the Projects page for the organization, and select a repository from the list.
+-   To view all Organization projects, visit [/projects](https://gitpod.io/projects).
 
-The list will show repositories from one of your git providers. Select a different provider if necessary. You may also be prompted to configure our [GitHub app](/docs/configure/authentication/github#authorizing-github-webhooks), the first time a project is created for a GitHub account. The new project will be associated with the current organization selected in the dashboard.
+### Adding a Project
 
-### Configure a project
+-   To add a new project, visit [/projects/new](https://gitpod.io/projects/new).
+<!-- * A user can only add repositories that they have access to.  -->
+
+<!-- * You may also be prompted to configure our [GitHub app](/docs/configure/authentication/github#authorizing-github-webhooks), the first time a project is created for a GitHub account. The new project will be associated with the current organization selected in the dashboard. -->
+
+### Configuring a Project
 
 Organization members can configure Prebuilds, and set the workspace class used for project workspaces, in project settings.
-
-![Project Settings](/images/docs/project-settings.png)
 
 ### Remove a project
 
 You can remove a project using the "Remove project" action from a project card.
 
 ## FAQs
+
+### Am I billed for Prebuilds on a Project?
+
+<!-- TODO: -->
 
 ### [New Project page is stuck at fetching repositories](https://discord.com/channels/816244985187008514/1056255866791272488)
 
