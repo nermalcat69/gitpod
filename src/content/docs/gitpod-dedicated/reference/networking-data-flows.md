@@ -30,10 +30,11 @@ For Gitpod to function, the following services need to be reachable from the ins
 -   **Git provider** (outbound connectivity always required, inbound connectivity for prebuilds): This feature enables users to see the contents of their Git repos and for enabling [prebuilds](https://www.gitpod.io/docs/configure/projects/prebuilds). For prebuilds, inbound connectivity is required as they use webhooks to be triggered. If the git provider is only available on the public internet (e.g. Gitlab.com), this means the instance requires an inbound and outbound connection to the public internet.
 -   **Identity Provider (IDP) connectivity** (inbound and outbound connectivity): IDP connectivity (both inbound and outbound) is required to enable [OIDC from within workspaces](https://www.gitpod.io/docs/configure/workspaces/oidc). This allows workspaces to connect and authenticate with third party services such as AWS. If the IDP is only available on the public internet, this means the instance requires an inbound and outbound connection to the public internet.
 -   **VS Code** (in the browser, outbound connectivity only)
-    |Source|Description|Domain|
-    |---------|-----------|------|
-    |Extension management| For searching, installing and updating vscode extensions. |https://open-vsx.org/ <br> https://open-vsx.gitpod.io/ <br> https://openvsxorg.blob.core.windows.net/ |
-    |JSON Language Features (built-in extension)|For the JSON extension to properly work and provide IntelliSense and validation.|https://www.schemastore.org/json/|
+
+    |                   Source                    |                                   Description                                    |                                                Domain                                                 |
+    | :-----------------------------------------: | :------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------: |
+    |            Extension management             |            For searching, installing and updating vscode extensions.             | https://open-vsx.org/ <br> https://open-vsx.gitpod.io/ <br> https://openvsxorg.blob.core.windows.net/ |
+    | JSON Language Features (built-in extension) | For the JSON extension to properly work and provide IntelliSense and validation. |                                   https://www.schemastore.org/json/                                   |
 
 ### Networking Modes and Diagrams
 
