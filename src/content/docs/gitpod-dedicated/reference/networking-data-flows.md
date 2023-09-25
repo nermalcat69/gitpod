@@ -32,7 +32,7 @@ For Gitpod to function, the following services need to be reachable from the ins
 -   **VS Code** (in the browser, outbound connectivity only)
     |Source|Description|Domain|
     |---------|-----------|------|
-    |Extension management| For seaching, installing and updating vscode extensions. |https://open-vsx.org/ <br> https://open-vsx.gitpod.io/ <br> https://openvsxorg.blob.core.windows.net/ |
+    |Extension management| For searching, installing and updating vscode extensions. |https://open-vsx.org/ <br> https://open-vsx.gitpod.io/ <br> https://openvsxorg.blob.core.windows.net/ |
     |JSON Language Features (built-in extension)|For the JSON extension to properly work and provide IntelliSense and validation.|https://www.schemastore.org/json/|
 
 ### Networking Modes and Diagrams
