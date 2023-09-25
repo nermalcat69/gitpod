@@ -6,46 +6,46 @@ description: Learn how to configure prebuilds for your Gitpod projects. Prebuild
 
 # Prebuilds
 
-Prebuilds speed up the time to open a workspace in Gitpod by running defined installation tasks from the `.gitpod.yml` stored in the repository asynchronously ahead of time. Prebuilds work similarly to Continuous Integration (CI) systems by responding to an SCM trigger (webhooks) and remotely executing instructions.
+Prebuilds help you to optimise the time to open a workspace in Gitpod by executing any defined installation tasks from the `.gitpod.yml` in associated repository asynchronously ahead of time.
+
+Rather than running installation tasks every time you open a workspace, with Prebuilds, Gitpod will run any installation and setup tasks for you behind-the-scenes, cache them, and then re-use that cache when starting your workspace. Prebuilds work similarly to Continuous Integration (CI) systems by responding to an SCM trigger (webhooks) and remotely executing instructions.
+
+To understand Prebuilds in Gitpod, it helps to already be familiar with:
+
+1. [Projects](/docs/configure/projects)
+2. [Tasks](/docs/configure/workspaces/tasks)
+3. [.gitpod.yml](/docs/references/gitpod-yml)
 
 `youtube: DwkoOz1GSVg`
 
-## Projects, Prebuilds and the `.gitpod.yml`
+## How Prebuilds relate to Projects and `.gitpod.yml`
 
-The `.gitpod.yml` stored in your repository is a declarative instruction set of how a repository should be started. Gitpod runs these instructions automatically when workspaces start, regardless of whether Prebuilds are enabled for the repository or not.
+A Prebuild cannot be created without a Project, as Projects control Prebuild settings. A Prebuild also requires that you have a `.gitpod.yml` stored in your repository with either the `init` or `before` tasks added as these tasks tell Gitpod what to execute in the Prebuild.
 
-The project entity is complimentary to a repository `.gitpod.yml` definition. By defining the `init` and `before` tasks in your `.gitpod.yml` you are telling Gitpod which parts of your setup script can be handled in a Prebuild, when enabled.
+The `.gitpod.yml` stored in your repository is a declarative instruction set of how the repository should be bootstrapped. Gitpod will run these instructions automatically when workspaces start, regardless of whether Prebuilds are enabled for the repository or not.
+
+Creating a Project and enabling a Prebuild is complimentary to the repositories `.gitpod.yml` definition. In fact, by defining the `init` and `before` tasks in your `.gitpod.yml` you are explicitly telling Gitpod which parts of your setup scripts can be handled asynchronously in a Prebuild.
 
 ## Prebuild triggers
 
-For a Prebuild to run, it must first receive a trigger, either:
+Prebuilds are executed based on triggers, such as:
 
-1. Via Webhook
-2. Manually
+1. **Webhook** - A URL is registered with the git provider, which is then invoked when changes are observed to the repository. Some Git providers allow webhooks to be filtered, otherwise those filters must be applied via the Gitpod Project settings.
+2. **Manually** - A user can trigger a Prebuild manually through the Gitpod UI, which can be useful for testing Prebuilds.
 
-#### Webhook Prebuild triggering
+#### Webhook Prebuild triggers
 
-#### Manual Prebuild triggering
+Prebuilds are trigger based on webhooks. The user who creates the project must have permissions to setup a webhook on the repository. Each user can modify their settings in the [user settings](/user/integrations).
 
-All prebuilds require a [Gitpod project](/docs/configure/projects#add-a-new-project) for the repository.
+By default, Gitpod Prebuilds workspaces for all changes on the default branch and for pull/merge requests from the same repository.
 
-For a GitLab or Bitbucket repository, allow Gitpod to install repository webhooks, by granting `api` permissions in your [git provider integrations](https://gitpod.io/integrations)
+For more details on how to setup webhooks for each provider, see:
 
-For GitLab, if you want to trigger new Gitpod prebuilds for specific branches only, you can configure this in your GitLab [project settings](https://docs.gitlab.com/ee/user/project/integrations/webhooks.html#branch-filtering).
+-   [BitBucket](/docs/integrations/bitbucket)
+-   [GitHub](/docs/integrations/github)
+-   [GitLab](/docs/integrations/gitlab)
 
-By default, Gitpod prepares prebuilt workspaces for all changes on the default branch and for pull/merge requests coming from the same repository.
-
-> **Note**: Prebuilds are executed as the user who enabled them. This means that if you want to use
-> prebuilds on a private repository, you must give Gitpod access to private repositories.
-
-Prebuilds are configured in your repository's [`.gitpod.yml`](/docs/references/gitpod-yml) file with the following start tasks:
-
--   `before`
--   `init`
-
-Prebuilds have a timeout of 1 hour. If your `before` and `init` tasks combined exceed 1 hour, your prebuild will fail. Subscribe to [this issue](https://github.com/gitpod-io/gitpod/issues/6283) for updates when this limit will be lifted.
-
-Each prebuild starts with a clean environment. In other words, Gitpod does not cache artifacts between prebuilds.
+#### Manual Prebuild triggers
 
 Incremental Prebuilds use an earlier, successful Prebuild as the base. This can reduce the duration of your Prebuilds significantly, especially if they normally take more than ten minutes to complete. Incremental Prebuilds can be found under the project settings in your Gitpod dashboard.
 
@@ -53,23 +53,53 @@ Incremental Prebuilds use an earlier, successful Prebuild as the base. This can 
 
 A Prebuild filter allows you to configure when a Prebuild should execute, even after a trigger is received. Prebuild filters can help to save costs by not running Prebuilds unnecessarily.
 
+### Configuring Prebuilds in the `.gitpod.yml`
+
+### Branch based filters
+
+For GitLab, if you want to trigger new Gitpod prebuilds for specific branches only, you can configure this in your GitLab [project settings](https://docs.gitlab.com/ee/user/project/integrations/webhooks.html#branch-filtering).
+
+See:
+
+-   [BitBucket](/docs/integrations/bitbucket)
+-   [GitHub](/docs/integrations/github)
+-   [GitLab](/docs/integrations/gitlab)
+
 ### Skip Prebuilds by commit
 
 Gitpod can leverage Prebuilds which are made on previous commits, and doesn't require a Prebuild to be created for the exact commit of the workspace. You can configure how many commits to "skip" in your Project settings. You may want to consider skipping a larger number commits if your repository has a large volume of commits. If you don't push new commits often configuring to skip `0` prebuilds could be appropriate.
 
-## Prebuild limitations
+## Prebuild Modes
 
-### Only the `/workspace` directory is persisted
+Each Prebuild starts with a clean environment. In other words, Gitpod does not cache artifacts between prebuilds.
 
-Prebuilds save **only** the workspace directory. Other directories like the home directory are not saved by prebuilds.
+### Incremental Prebuilds
 
-To use global installs like 'npm install -g', we suggest using a custom Dockerfile or a `before` task, which runs before the init task, and runs again before the command task.
+Incremental prebuilds leverage previously successful Prebuilds to create a new Prebuild more efficiently by re-running the `before` and `init` tasks again to create a newer Prebuild. By re-using the filesystem the Prebuild typically completes more quickly.
+
+Gitpod finds a Prebuild to increment on by traversing up to 100 ancestor (e.g. related) commits to find the last successful prebuild that has an identical `init` task. If no suitable base Prebuild is found, Gitpod will build using a blank file system.
+
+> **Important:** The `.gitpod.yml` tasks will be re-ran so must be idempotent. You can test this by running `gp validate --prebuild` multiple times in your workspace.
+
+### Last Successful Prebuild
+
+Gitpod by default enforces that a Prebuild must match for the exact commit of a workspace. When enabling "last successful Prebuild". Gitpod will traverse the last 100 ancestor commits to use the last successful Prebuild.
 
 ## Managing Prebuilds
 
-### Enabling prebuilds
+To configure a Prebuild for a repository you must:
+
+1. Add a `init` or `before` task in the repository [gitpod.yml](https://www.gitpod.io/docs/references/gitpod-yml).
+2. Create a corresponding [Project](/docs/configure/projects) for the repository.
+3. Enable Prebuilds in the project settings.
+
+> **Tip:** You can test changes to your tasks and `.gitpod.yml` directly in your workspace by running the `gp validate --prebuild` command.
+
+### Configuring Prebuilds
 
 A prebuild cannot be executed unless you tell Gitpod explicitly which steps in your `.gitpod.yml` should be ran in the prebuild. You can do this by ensuring you have either an `init` or `before` task.
+
+The below example `.gitpod.yml` shows a repository that will run `npm install` inside a Prebuild. The `command` task with `npm start` is not executed in the Prebuild as it's assumed to be a long-running process, e.g. running a web server.
 
 ```yml
 tasks:
@@ -79,24 +109,13 @@ tasks:
           npm start
 ```
 
-**Caption:** The above example `.gitpod.yml` will runs `npm install` in the Prebuild, and `npm start` when the workspace starts.
+### Enabling prebuilds
 
-1. **The `before` task [reference](/docs/references/gitpod-yml#tasksnbefore)** - A task executed on every workspace start.
-2. **The `init` task [reference](/docs/references/gitpod-yml#tasksninit)** - Executed only once, either in the Prebuild if Prebuilds are enabled, or on the workspace start if Prebuilds are disabled.
-
-When a Prebuild runs successfully, you will see the following message in your workspace terminal output:
+When a Prebuild ran successfully, you will see the following in your workspace output:
 
 ```txt
 🤙 This task ran as a workspace prebuild
 ```
-
-The `command` task is not executed in Prebuilds as it's presumed to be long-running, e.g. starting a long-running web server.
-
-1. Define an `init` or `before` [task](https://www.gitpod.io/docs/configure/workspaces/tasks) in your repository [gitpod.yml](https://www.gitpod.io/docs/references/gitpod-yml).
-2. Validate the change by running `gp validate --prebuild`
-3. Create a [Project](/docs/configure/projects) for the repository.
-4. Enable Prebuilds in the project settings.
-5. Start a workspace based on the project.
 
 Since prebuilds are included in all our metered [pay-as-you-go](https://www.gitpod.io/docs/configure/billing) plans, configuring prebuild settings in your project should help with managing prebuild usage.
 
@@ -116,97 +135,26 @@ Prebuilds can be triggered manually for debugging purposes. To rerun a prebuild:
 2. Select the Prebuild.
 3. Select "Rerun Prebuild".
 
-### Configuring prebuilds
+## Prebuild limitations
 
-> **Important:** The following Prebuild configuration method **only applies to GitHub**. There is no way to configure Prebuild filters in the `.gitpod.yml` for GitLab or Bitbucket.
+### Only the `/workspace` directory is persisted from a Prebuild
 
-The `github` namespace in the `.gitpod.yml` file defines when prebuilds should be executed. By default, prebuilds are run on push to the default branch and for each pull request coming from the same repository.
+Once a Prebuild is completed, a snapshot of the filesystem is taken. However, this snapshot only includes the `/workspace` directory. Other directories like the home directory are not saved by Prebuilds. To ensure the necessary files are saved, copy them to the `/workspace` directory before the Prebuild completes, and/or restore those files in your `command` task.
 
-```yml
-github:
-    prebuilds:
-        # enable for the default branch (defaults to true)
-        master: true
-        # enable for all branches in this repo (defaults to false)
-        branches: false
-        # enable for pull requests coming from this repo (defaults to true)
-        pullRequests: true
-        # enable for pull requests coming from forks (defaults to false)
-        pullRequestsFromForks: false
-        # add a check to pull requests (defaults to true)
-        addCheck: true
-        # add a "Review in Gitpod" button as a comment to pull requests (defaults to false)
-        addComment: false
-        # add a "Review in Gitpod" button to the pull request's description (defaults to false)
-        addBadge: false
-```
+### Prebuilds have a 1 hour time limit
 
-#### Additional GitHub integration
+Prebuilds have a timeout of 1 hour. If your `before` and `init` tasks combined exceed 1 hour, your Prebuild will be terminated.
 
-Once the GitHub app is installed, Gitpod can add helpful annotations to your pull requests.
+### Prebuilds are executed as the user who enables them
 
-#### Checks
+To pull git information into a workspace, Prebuilds are executed on behalf of the user who created the Prebuild.
 
-By default, Gitpod registers itself as a check to pull requests - much like a continuous integration system would do.
+### Workspaces may behave differently when Prebuilds are disabled
 
-The default behavior, however, would not make the checks fail when the prebuild failed.
-This can be enabled with the following snippet:
+If your scripts are reliant on Project environment variables but no Prebuild is ran, the workspace will not have access to those Project environment variables causing unexpected behaviours. We suggest you:
 
-```yml
-github:
-    prebuilds:
-        addCheck: prevent-merge-on-error
-```
-
-You can disable this behaviour in the `.gitpod.yml` file in your default branch:
-
-```yml
-github:
-    prebuilds:
-        addCheck: false
-```
-
-#### Comment
-
-Gitpod can add a comment with an "Open in Gitpod" button to your pull requests.
-
-You can enable this behaviour in the `.gitpod.yml` file in your default branch:
-
-```yml
-github:
-    prebuilds:
-        addComment: true
-```
-
-#### Badge
-
-Instead of adding a comment, Gitpod can also modify the description of a pull request to add the "Open in Gitpod" button.
-This approach produces fewer GitHub notifications, but can also create a concurrent editing conflict when the bot and a user try to edit the description of a pull request at the same time.
-
-You can enable this behaviour in the `.gitpod.yml` file in your default branch:
-
-```yml
-github:
-    prebuilds:
-        addBadge: true
-```
-
-The `addComment` and `addBadge` behaviours are not mutually exclusive (i.e. enabling one does not disable the other).
-If you don't want the comments to be added, disable them using `addComment: false`.
-
-## Prebuild Modes
-
-### Incremental Prebuilds
-
-Incremental prebuilds leverage previously successful Prebuilds to create a new Prebuild more efficiently by re-running the `before` and `init` tasks again to create a newer Prebuild. By re-using the filesystem the Prebuild typically completes more quickly.
-
-Gitpod finds a Prebuild to increment on by traversing up to 100 ancestor (e.g. related) commits to find the last successful prebuild that has an identical `init` task. If no suitable base Prebuild is found, Gitpod will build using a blank file system.
-
-> **Important:** The `.gitpod.yml` tasks will be re-ran so must be idempotent. You can test this by running `gp validate --prebuild` multiple times in your workspace.
-
-### Last Successful Prebuild
-
-Gitpod by default enforces that a Prebuild must match for the exact commit of a workspace. When enabling "last successful Prebuild". Gitpod will traverse the last 100 ancestor commits to use the last successful Prebuild.
+1. Throw an error when there are missing Project environment variables
+2. Ensure your scripts run whether in a Prebuild, or not.
 
 ## Frequently Asked Questions (FAQs)
 

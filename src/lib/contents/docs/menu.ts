@@ -242,6 +242,9 @@ export const MENU: MenuEntry[] = [
 	]),
 	M('Integrations', 'integrations', false, [
 		M('Amazon Web Services (AWS)', 'integrations/aws', false, []),
+		M('BitBucket', 'integrations/bitbucket'),
+		M('GitLab', 'integrations/gitlab'),
+		M('GitHub', 'integrations/github'),
 		M(
 			'JetBrains Gateway',
 			'integrations/jetbrains-gateway',
@@ -249,7 +252,6 @@ export const MENU: MenuEntry[] = [
 			[],
 			'beta',
 		),
-		M('Tailscale', 'integrations/tailscale'),
 	]),
 	M('Gitpod CLI', 'references/gitpod-cli'),
 	M('Compatibility', 'references/compatibility?user'),
