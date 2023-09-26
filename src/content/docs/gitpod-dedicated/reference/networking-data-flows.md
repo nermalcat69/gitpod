@@ -36,6 +36,12 @@ For Gitpod to function, the following services need to be reachable from the ins
     |            Extension management             |            For searching, installing and updating vscode extensions.             | https://open-vsx.org/ <br> https://open-vsx.gitpod.io/ <br> https://openvsxorg.blob.core.windows.net/ |
     | JSON Language Features (built-in extension) | For the JSON extension to properly work and provide IntelliSense and validation. |                                   https://www.schemastore.org/json/                                   |
 
+-   **JetBrains** (outbound connectivity only)
+
+    |             Source              |                               Description                                |                                                                           Domain                                                                           |
+    | :-----------------------------: | :----------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------: |
+    | Extension and client management | For access to the marketplace and downloading JetBrains clients/backends | https://download.jetbrains.com/ <br> https://download-cf.jetbrains.com/ <br> https://download-cdn.jetbrains.com/ <br> https://data.services.jetbrains.com/ |
+
 ### Networking Modes and Diagrams
 
 Gitpod Dedicated can operate in four different networking modes depending on the customer’s choice. These differ in their connectivity on the ingress and egress side to the public internet. Please see the diagram below for an overview:
