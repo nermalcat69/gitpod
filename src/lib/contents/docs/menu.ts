@@ -47,7 +47,6 @@ export const MENU: MenuEntry[] = [
 		M('OpenID Connect (OIDC)', 'configure/workspaces/oidc', false, []),
 		M('Multi-repo', 'configure/workspaces/multi-repo', false, [], 'beta'),
 		M('Workspace classes', 'configure/workspaces/workspace-classes'),
-		M('Autostart', 'configure/workspaces/autostart'),
 	]),
 
 	M('User settings', 'configure/user-settings', false, [
