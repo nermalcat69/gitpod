@@ -10,7 +10,7 @@ ogImage: browser-extension-button.webp
 
 The Gitpod browser extension has now been updated with the following changes:
 
-1. **Start new workspaces faster** - To save time, the default browser extension action will open your workspaces using either your stored [autostart](/docs/configure/workspaces/autostart) preferences for the repository, or your user settings. To override this behavior and choose your settings manually, you can use the _"Open with options..."_ secondary option on the Gitpod button.
+1. **Start new workspaces faster** - To save time, the default browser extension action will open your workspaces using either your preferences for the repository, or your user settings. To override this behavior and choose your settings manually, you can use the _"Open with options..."_ secondary option on the Gitpod button.
 2. **Support for Self-Hosted BitBucket and GitLab** - The browser extension is now compatible with both Bitbucket Datacenter and GitLab Self-hosted installations. No special steps are required: with the extension installed navigate to your BitBucket or GitLab instance to see the Gitpod button appear within the interface.
 
 **Getting Started**:
